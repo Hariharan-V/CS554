@@ -45,7 +45,7 @@ gulp.task("js:vendor", e => {
 gulp.task("build", gulp.series("sass", "js:vendor"));
 
 gulp.task("watch", () => {
-  gulp.watch(sassFiles, ["sass"]);
+  gulp.watch(sassFiles, gulp.series("sass"));
 });
 
-gulp.task("default", gulp.series("build"));
+gulp.task("default", gulp.series("watch"));
