@@ -1,5 +1,6 @@
 import React from "react";
 import Showdown from "showdown";
+import "../css/Htmlpreview.css";
 class Htmlpreview extends React.Component{
 	static converter =  new Showdown.Converter();
 	render() {
