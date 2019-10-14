@@ -1,0 +1,11 @@
+a:focus {
+    color: #40a97b;
+  }
+textarea{
+    width : 100%;
+    height: 1000px;
+}
+td{
+    width: 700px;
+    padding: 10px;
+}
