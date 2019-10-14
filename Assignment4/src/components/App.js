@@ -5,7 +5,7 @@ import "../css/custom.css"
 import Template from "../static/template";
 class App extends React.Component {
 
-	state = {markdown:'', htmlName: 'HTMLFile.html',markdownName:'markdown.md' };
+	state = {markdown:'', htmlName: '',markdownName:'' };
 	
 	change = (event)=>{
 
@@ -13,20 +13,45 @@ class App extends React.Component {
 
 	}
 	markdownDownload = ()=>{
+		if(this.state.markdownName==null||this.state.markdownName==NaN  || this.state.markdownName.length==0){
+			alert("No file name entered");
+			
+			return;
+		}
+
 		const blob = new Blob([this.state.markdown],{type : "text/plain;charset=utf-8"});
 		const url = URL.createObjectURL(blob);
-		this.setState({markdownURL: url });
+		const anchor = document.createElement('a');
+		anchor.href = url;
+		anchor.setAttribute("download",this.state.markdownName+".md");
+		anchor.click();
 	}
 	htmlDownload = ()=>{
+		if(this.state.htmlName==null||this.state.htmlName==NaN  || this.state.htmlName.length==0){
+			alert("No file name entered");
+			return;
+		}
 		const blob = new Blob([Template.constructHTML(this.state.htmlName,Htmlpreview.converter.makeHtml(this.state.markdown))],{type : "text/plain;charset=utf-8"});
 		const url = URL.createObjectURL(blob);
-		this.setState({htmlURL: url });
+		const anchor = document.createElement('a');
+		anchor.href = url;
+		anchor.setAttribute("download",this.state.htmlName+".html");
+		anchor.click();
+	
 	}
 	setMarkdownName = (event)=>{
-		this.setState({markdownName:event.target.value+".md"});
+
+		this.setState({markdownName:event.target.value});
 	}
 	setHTMLName = (event)=>{
-		this.setState({htmlName:event.target.value+".html"});
+		this.setState({htmlName:event.target.value});
+	}
+	shouldComponentUpdate = (nextProps, nextState)=>{
+		if (this.state.markdownName!=nextState.markdownName || this.state.htmlName!= nextState.htmlName){
+			return false;
+		}
+
+		return true;
 	}
 	render(){
 		return (
@@ -37,8 +62,8 @@ class App extends React.Component {
 					<th>Set name for html file:<input type="text" name="HTMLFile" onChange = {this.setHTMLName}></input></th>
 				</tr>
 				<tr>
-					<th><a href={this.state.markdownURL} download = {this.state.markdownName} onClick = {this.markdownDownload}>Click to Download Markdown</a> </th>
-					<th><a href={this.state.htmlURL} download = {this.state.htmlName} onClick = {this.htmlDownload}>Click to Download HTML</a></th>
+					<th><button onClick = {this.markdownDownload}>Click to Download Markdown</button> </th>
+					<th><button onClick = {this.htmlDownload}>Click to Download HTML</button></th>
 				</tr>
 	    		<tr>
 	        		<td><Markdown change = {this.change}/></td>
