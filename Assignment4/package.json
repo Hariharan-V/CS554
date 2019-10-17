@@ -1,7 +1,7 @@
 {
-  "name": "cs-554-lecture-04",
+  "name": "Assignment4",
   "version": "1.0.0",
-  "description": "A small demo react application",
+  "description": "MD to html converter",
   "main": "main.js",
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
@@ -17,11 +17,6 @@
     "start",
     "tutorial"
   ],
-  "author": "GitHub",
-  "bugs": {
-    "url": "https://github.com/Stevens-CS546/CS-554/issues"
-  },
-  "homepage": "https://github.com/Stevens-CS546/CS-554#readme",
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-syntax-class-properties": "^7.0.0",
