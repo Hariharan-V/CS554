@@ -58,7 +58,7 @@ class App extends React.Component {
 	    <table>
 	    	<tbody >
 				<tr>
-					<th>Set name for md file:<input type="text" name="markdown"  onChange = {this.setMarkdownName}></input></th>
+					<th>Hello:<input type="text" name="markdown"  onChange = {this.setMarkdownName}></input></th>
 					<th>Set name for html file:<input type="text" name="HTMLFile" onChange = {this.setHTMLName}></input></th>
 				</tr>
 				<tr>
