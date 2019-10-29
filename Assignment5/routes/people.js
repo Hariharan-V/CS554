@@ -22,8 +22,12 @@ router.get("/:id",async(req,res)=>{
            return;
        } 
     }
-    
-    obj  = await search.getById(id);
+    try{
+        obj  = await search.getById(id);
+    }catch(e){
+        res.status(404).json({error:"ID Not Found"});
+        return;
+    }
     if(obj!=null){
         await client.lpushAsync("user",[JSON.stringify(obj)]);
         res.status(200).json(obj);
