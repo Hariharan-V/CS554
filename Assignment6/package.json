@@ -16,6 +16,8 @@
     "concurrently": "^5.0.0",
     "express": "^4.17.1",
     "node-redis-pubsub": "^4.0.0",
-    "redis": "^2.8.0"
+    "node-uuid": "^1.4.8",
+    "redis": "^2.8.0",
+    "uuid": "^3.3.3"
   }
 }

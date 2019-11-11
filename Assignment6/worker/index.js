@@ -6,19 +6,92 @@ const messageHandlers = require('../data');
 
 (async()=>{
     await messageHandlers.loadJson();
-    redisConnection.on('GET', async (obj, channel) => {
-        const result = await messageHandlers.GET(obj.id)
-        redisConnection.emit('GET-Response',result);
+    redisConnection.on('GET:request:*', async (message, channel) => {
+
+        const result = await messageHandlers.GET(message.data.id)
+        let requestId = message.requestId;
+        let eventName = message.eventName;
+        let successEvent = `${eventName}:success:${requestId}`;
+        let failEvent = `${eventName}:failed:${requestId}`;
+        if(result.status=='200'){
+          redisConnection.emit(successEvent, {
+            requestId: requestId,
+            data: result.data,
+            eventName: eventName
+          });
+        }else{
+          redisConnection.emit(failEvent, {
+            requestId: requestId,
+            data: result,
+            eventName: eventName
+          });
+        }
       });
-    redisConnection.on('POST',async(obj,channel)=>{
-        redisConnection.emit('POST-Response',await messageHandlers.POST(obj));
+    redisConnection.on('POST:request:*',async(message,channel)=>{
+        const result = await messageHandlers.POST(message.data)
+        // console.log("result:"+result);
+        let requestId = message.requestId;
+        let eventName = message.eventName;
+        let successEvent = `${eventName}:success:${requestId}`;
+        let failEvent = `${eventName}:failed:${requestId}`;
+        // console.log(result);
+        if(result.status=='200'){
+          redisConnection.emit(successEvent, {
+            requestId: requestId,
+            data: result.data,
+            eventName: eventName
+          });
+        }else{
+          redisConnection.emit(failEvent, {
+            requestId: requestId,
+            data: result,
+            eventName: eventName
+          });
+        }
     });
-    // redisConnection.on('PUT',(obj,channel)=>{
-    //     redisConnection.emit('PUT-Response',{});
-    // });
-    redisConnection.on('DELETE', async (obj,channel)=>{
-        redisConnection.emit('DELETE-Response',(await messageHandlers.DELETE(obj.id)));
+    redisConnection.on('DELETE:request:*', async (message,channel)=>{
+        const result = await messageHandlers.DELETE(message.data.id);
+        let requestId = message.requestId;
+        let eventName = message.eventName;
+        let successEvent = `${eventName}:success:${requestId}`;
+        let failEvent = `${eventName}:failed:${requestId}`;
+        if(result.status=='200'){
+          redisConnection.emit(successEvent, {
+            requestId: requestId,
+            data: result,
+            eventName: eventName
+          });
+        }else{
+          redisConnection.emit(failEvent, {
+            requestId: requestId,
+            data: result,
+            eventName: eventName
+          });
+        }
+
     });
+    redisConnection.on('PUT:request:*', async (message,channel)=>{
+      const result = await messageHandlers.PUT(message.data.id,message.data.body);
+      let requestId = message.requestId;
+      let eventName = message.eventName;
+      let successEvent = `${eventName}:success:${requestId}`;
+      let failEvent = `${eventName}:failed:${requestId}`;
+      if(result.status=='200'){
+        redisConnection.emit(successEvent, {
+          requestId: requestId,
+          data: result.data,
+          eventName: eventName
+        });
+      }else{
+        redisConnection.emit(failEvent, {
+          requestId: requestId,
+          data: result,
+          eventName: eventName
+        });
+      }
+
+  });
+
 })();
 
 

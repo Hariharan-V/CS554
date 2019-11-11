@@ -4,48 +4,73 @@ var app = express();
 const redisConnection = (require('../redis-connection'));
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
+const nrpSender = require('./nrp-sender-shim');
 app.get('/api/people/:id',async (req,res)=>{
-    let sub = null;
-    sub = redisConnection.on('GET-Response',async (obj, channel)=>{
-        sub();
-        if(obj.status==='404'){
-            res.status('404').json({error:obj.message});
-            return;
-        }
-        res.json(obj.data);
-        
-    }) 
-    redisConnection.emit('GET',{id:req.params.id});
+    try{
+        let obj = await nrpSender.sendMessage({
+            redis: redisConnection,
+            eventName: 'GET',
+            data:{
+                id:req.params.id
+            }
+        });
+
+        res.json(obj);
+        return;
+    }catch(e){
+        res.status(e.status).json({error:e.message});
+        return;
+    }
+    
+
 });
  app.post('/api/people/', async(req,res)=>{
-     
-    let sub = null; 
-    sub = redisConnection.on('POST-Response',async(obj,channel)=>{
-        sub();
-        if(obj.status==='400'){
-            res.status('400').json(obj);
-            return;
-        }
-        res.json(obj.data);
-    })
-    redisConnection.emit('POST',req.body);
- });
-// app.put('/api/people/:id',async(req,res)=>{
-    
-// });
-app.delete('/api/people/:id',async(req,res)=>{
-    let sub = null;
-    sub = redisConnection.on('DELETE-Response',async (obj, channel)=>{
-        sub();
-        if(obj.status==='404'){
-            res.status('404').json(obj);
-            return;
-        }
+    try{
+        let obj = await nrpSender.sendMessage({
+            redis: redisConnection,
+            eventName: 'POST',
+            data:req.body
+        });
+
         res.json(obj);
-       
-    }) 
-    redisConnection.emit('DELETE',{id:req.params.id});
+        return;
+    }catch(e){
+        res.status(e.status).json({error:e.message});
+        return;
+    }
+ });
+app.put('/api/people/:id',async(req,res)=>{
+    console.log(req.body);
+    try{
+        let obj = await nrpSender.sendMessage({
+            redis: redisConnection,
+            eventName: 'PUT',
+            data:{body: req.body, id: req.params.id}
+        });
+
+        res.json(obj);
+        return;
+    }catch(e){
+        res.status(e.status).json({error:e.message});
+        return;
+    }
+});
+app.delete('/api/people/:id',async(req,res)=>{
+    try{
+        let obj = await nrpSender.sendMessage({
+            redis: redisConnection,
+            eventName: 'DELETE',
+            data:{id:req.params.id}
+        });
+
+        res.json(obj);
+        return;
+    }catch(e){
+        res.status(e.status).json({error:e.message});
+        return;
+    }
+
+
 });
 app.use('*', async (req,res)=>{
     res.status(404).json({error:"Not Found"});
