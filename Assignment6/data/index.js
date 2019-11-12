@@ -57,10 +57,12 @@ const PUT = async(id,obj)=>{
         }
     }
 
-    if(obj===undefined ||obj.first_name===undefined||obj.last_name===undefined||obj.email===undefined||obj.gender===undefined||obj.ip_address===undefined){
+    if(obj===undefined ||obj.first_name===undefined||obj.last_name===undefined||obj.email===undefined||obj.gender===undefined||obj.ip_address===undefined
+        || typeof obj.first_name !== 'string' ||typeof obj.last_name !== 'string' || typeof obj.email !== 'string' ||typeof obj.gender !== 'string'||typeof obj.ip_address !== 'string'
+        || obj.first_name.length===0 || obj.last_name.length===0 || obj.email.length===0 || obj.gender.length===0 ||obj.ip_address.length===0){
         return {
             status:'400',
-            message:'Not all fields were provided, a JSON object with first_name, last_name, email, gender, and ip_address is needed'
+            message:'Not all fields were provided, a JSON object with first_name, last_name, email, gender, and ip_address is needed, all of type string'
         }
     }
     obj.id = id;
@@ -70,7 +72,9 @@ const PUT = async(id,obj)=>{
 
 }
 const POST = async(obj)=>{
-    if(obj===undefined ||obj.first_name===undefined||obj.last_name===undefined||obj.email===undefined||obj.gender===undefined||obj.ip_address===undefined){
+    if(obj===undefined ||obj.first_name===undefined||obj.last_name===undefined||obj.email===undefined||obj.gender===undefined||obj.ip_address===undefined
+        || typeof obj.first_name !== 'string' ||typeof obj.last_name !== 'string' || typeof obj.email !== 'string' ||typeof obj.gender !== 'string'||typeof obj.ip_address !== 'string'
+        || obj.first_name.length===0 || obj.last_name.length===0 || obj.email.length===0 || obj.gender.length===0 ||obj.ip_address.length===0){
         return {
             status:'400',
             message:'Not all fields were provided, a JSON object with first_name, last_name, email, gender, and ip_address is needed'
