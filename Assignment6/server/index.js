@@ -40,7 +40,7 @@ app.get('/api/people/:id',async (req,res)=>{
     }
  });
 app.put('/api/people/:id',async(req,res)=>{
-    console.log(req.body);
+    // console.log(req.body);
     try{
         let obj = await nrpSender.sendMessage({
             redis: redisConnection,
