@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang = "en-US">
+    <head>
+        <title>Pixaby Chat</title>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        <form id = "usernameForm">
+            Username:
+            <input type="text" id = "username">
+            <input type="submit" id = "usernameSubmit" value="Submit" >
+            <br>
+        </form>
+        <div id = "chat">
+            <div id = "messageBox"></div>
+            <br>
+            <form id = "search">
+                <label for = "searchQuery">Search Query:</label>
+                <input type="text" id = "searchQuery">
+                <label for = "message">Message:</label>
+                <input type="text" id = "message">
+                <input type="submit" id = "searchSubmit" value="Submit" >
+            </form>
+        </div>
+        <script src="script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tota11y/0.1.6/tota11y.min.js"></script>
+    </body>
+    
+</html>
